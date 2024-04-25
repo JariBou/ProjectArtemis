@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.jaribou.graphicslabor": "https://github.com/JariBou/GraphicsLabor.git?path=/Assets/GraphicsLabor",
+    "com.jimmycushnie.noisynodes": "https://github.com/JimmyCushnie/Noisy-Nodes.git",
     "com.unity.collab-proxy": "2.3.1",
     "com.unity.feature.mobile": "1.0.0",
     "com.unity.ide.rider": "3.0.25",

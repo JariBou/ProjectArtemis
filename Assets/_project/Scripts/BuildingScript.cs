@@ -1,15 +1,31 @@
 using System.Collections.Generic;
+using _project.ScriptableObjects.Scripts;
 using UnityEngine;
 
 namespace _project.Scripts
 {
     public class BuildingScript : MonoBehaviour
     {
+        [SerializeField] private MeshRenderer _baseMeshRenderer;
         [SerializeField] private MeshRenderer _meshRenderer;
+        [SerializeField] private Transform _rangeIndicator;
+        private TowerScriptableObject _towerSo;
 
         private List<Collider> _enteredColliders = new List<Collider>();
         public bool CanBePlaced => _enteredColliders.Count == 0 && _isAllowedToBePlaced;
         private bool _isAllowedToBePlaced = true;
+
+
+        public void Config(TowerScriptableObject towerSo)
+        {
+            _towerSo = towerSo;
+            
+            float towerThiccness = _baseMeshRenderer.bounds.extents.x;
+
+            Vector3 rangeVector = new(towerThiccness + _towerSo.BaseRange, 2, towerThiccness + _towerSo.BaseRange);
+            
+            _rangeIndicator.localScale = rangeVector;
+        }
 
 
         private void OnTriggerEnter(Collider other)

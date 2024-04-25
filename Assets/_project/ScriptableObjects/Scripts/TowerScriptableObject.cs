@@ -7,20 +7,15 @@ namespace _project.ScriptableObjects.Scripts
     public class TowerScriptableObject : ScriptableObject
     {
         [SerializeField] private GameObject _prefab;
+        [SerializeField] private string _name;
         [SerializeField] private float _health;
         [SerializeField] private float _damage;
-    
-    
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        [SerializeField, Range(1, 20)] private float _baseRange;
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        public GameObject Prefab => _prefab;
+        public string Name => _name;
+        public float Health => _health;
+        public float Damage => _damage;
+        public float BaseRange => _baseRange;
     }
 }

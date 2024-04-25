@@ -1,15 +1,18 @@
 using System;
+using _project.ScriptableObjects.Scripts;
 using _project.Scripts;
 using _project.Scripts.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace _project._Tests
 {
     public class BuildingMoveScript : MonoBehaviour
     {
 
-        [SerializeField] private BuildingScript _building;
+        private GameObject _building;
+        private BuildingScript _buildingScript;
         private PlayerActions _playerActions;
 
         [SerializeField] private bool _isMovingBuilding;
@@ -28,14 +31,18 @@ namespace _project._Tests
         {
         }
 
-        public void MoveBuilding(GameObject obj)
+        public void BuyBuilding(TowerScriptableObject so)
         {
             if (_isMovingBuilding)
             {
-                Destroy(_building.gameObject);
+                Destroy(_building);
             }
+            
+            GameObject instance = Instantiate(so.Prefab, Vector3.up * 500, Quaternion.identity, transform);
 
-            _building = obj.GetComponent<BuildingScript>();
+            _building = instance;
+            _buildingScript = instance.GetComponent<BuildingScript>();
+            _buildingScript.Config(so);
             _isMovingBuilding = true;
         }
 
@@ -53,13 +60,13 @@ namespace _project._Tests
             {
                 if (hit.transform.gameObject.layer != _groundLayerNumber)
                 {
-                    _building.DisallowPlacement();
+                    _buildingScript.DisallowPlacement();
                 }
                 else
                 {
-                    _building.AllowPlacement();
+                    _buildingScript.AllowPlacement();
                 }
-                _building.MoveTo(hit.point);
+                _buildingScript.MoveTo(hit.point);
             }
         
         }
@@ -70,10 +77,10 @@ namespace _project._Tests
         
             if (PointerUtils.IsPointerOverUI) return;
         
-            if (!_building.CanBePlaced) return;
+            if (!_buildingScript.CanBePlaced) return;
        
             _isMovingBuilding = false;
-            _building = null;
+            _buildingScript = null;
         }
 
   

@@ -270,6 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 20
+  _cameraTransform: {fileID: 963194228}
 --- !u!1 &481845867
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buildingMoveScript: {fileID: 229064834}
-  _prefab: {fileID: 3366265065176848990, guid: 542277f17d529dd4ebb552ebede2d288, type: 3}
+  _prefab: {fileID: 6633512894389740733, guid: 242bafca14c71ff48a83f2b85311f6d2, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

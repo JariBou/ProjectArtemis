@@ -1,16 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingSpawner : MonoBehaviour
+namespace _project._Tests
 {
-    [SerializeField] private BuildingMoveScript _buildingMoveScript;
-
-    [SerializeField] private GameObject _prefab;
-
-    public void OnButtonClick()
+    public class BuildingSpawner : MonoBehaviour
     {
-        GameObject go = Instantiate(_prefab, Vector3.up*500, Quaternion.identity, transform);
-        _buildingMoveScript.MoveBuilding(go);
+        [SerializeField] private BuildingMoveScript _buildingMoveScript;
+
+        [SerializeField] private GameObject _prefab;
+
+        public void OnButtonClick()
+        {
+            GameObject go = Instantiate(_prefab, Vector3.up*500, Quaternion.identity, transform);
+            _buildingMoveScript.MoveBuilding(go);
+
+        }
     }
 }

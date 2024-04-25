@@ -1,79 +1,95 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using _project.Scripts;
+using _project.Scripts.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
-public class BuildingMoveScript : MonoBehaviour
+namespace _project._Tests
 {
-
-    [SerializeField] private GameObject _building;
-    private float _yOffset;
-    private PlayerActions _playerActions;
-
-    [SerializeField] private bool _isMovingBuilding;
-    [SerializeField] private LayerMask _responsiveLayers;
-    [SerializeField] private LayerMask _groundLayer;
-    private int _groundLayerNumber;
-
-    private void Awake()
+    public class BuildingMoveScript : MonoBehaviour
     {
-        _playerActions = new PlayerActions();
-        _groundLayerNumber = (int)Math.Log((int)_groundLayer, 2);
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+        [SerializeField] private BuildingScript _building;
+        private PlayerActions _playerActions;
 
-    public void MoveBuilding(GameObject obj)
-    {
-        _building = obj;
-        _yOffset = _building.GetComponent<MeshRenderer>().bounds.extents.y;
-        _isMovingBuilding = true;
-    }
+        [SerializeField] private bool _isMovingBuilding;
+        [SerializeField] private LayerMask _responsiveLayers;
+        [SerializeField] private LayerMask _groundLayer;
+        private int _groundLayerNumber;
 
-    // Update is called once per frame
-    void Update()
-    {
+        private void Awake()
+        {
+            _playerActions = new PlayerActions();
+            _groundLayerNumber = (int)Math.Log((int)_groundLayer, 2);
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+        }
+
+        public void MoveBuilding(GameObject obj)
+        {
+            if (_isMovingBuilding)
+            {
+                Destroy(_building.gameObject);
+            }
+
+            _building = obj.GetComponent<BuildingScript>();
+            _isMovingBuilding = true;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
         
-    }
+            if (!_isMovingBuilding) return;
+            Vector2 pointerPos = Input.mousePosition;
+        
+            Ray ray = Camera.main.ScreenPointToRay(pointerPos);
 
-    public void DropObject(InputAction.CallbackContext context)
-    {
-        if (!context.performed) return;
-        _isMovingBuilding = false;
-        _building = null;
-    }
+            Debug.DrawRay(ray.origin, ray.direction * 10000);
+            if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, float.MaxValue,  _responsiveLayers))
+            {
+                if (hit.transform.gameObject.layer != _groundLayerNumber)
+                {
+                    _building.DisallowPlacement();
+                }
+                else
+                {
+                    _building.AllowPlacement();
+                }
+                _building.MoveTo(hit.point);
+            }
+        
+        }
+    
+        public void DropObject(InputAction.CallbackContext context)
+        {
+            if (!context.performed) return;
+        
+            if (PointerUtils.IsPointerOverUI) return;
+        
+            if (!_building.CanBePlaced) return;
+       
+            _isMovingBuilding = false;
+            _building = null;
+        }
 
   
 
-    public void UpdatePointerPos(InputAction.CallbackContext context)
-    {
-        if (!_isMovingBuilding) return;
-
-        Vector2 pointerPos = context.ReadValue<Vector2>();
-        
-        Ray ray = Camera.main.ScreenPointToRay(pointerPos);
-
-        Debug.DrawRay(ray.origin, ray.direction * 10000);
-        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, float.MaxValue,  _responsiveLayers))
+        public void UpdatePointerPos(InputAction.CallbackContext context)
         {
-            if (hit.transform.gameObject.layer != _groundLayerNumber) return;
-            _building.transform.position = new Vector3(hit.point.x, hit.point.y + _yOffset, hit.point.z);
+        }
+    
+        private void OnEnable()
+        {
+            _playerActions.BaseActionMap.Enable();
         }
 
-    }
-    
-    private void OnEnable()
-    {
-        _playerActions.BaseActionMap.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _playerActions.BaseActionMap.Disable();
+        private void OnDisable()
+        {
+            _playerActions.BaseActionMap.Disable();
+        }
     }
 }

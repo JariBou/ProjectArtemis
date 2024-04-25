@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.jaribou.graphicslabor": {
+      "version": "https://github.com/JariBou/GraphicsLabor.git?path=/Assets/GraphicsLabor",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d111bfe73386af3accc3d24a647d96a84f813c4f"
+    },
     "com.unity.adaptiveperformance": {
       "version": "4.0.1",
       "depth": 1,

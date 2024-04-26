@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: TowerScriptableObject
   m_EditorClassIdentifier: 
   _prefab: {fileID: 6633512894389740733, guid: 242bafca14c71ff48a83f2b85311f6d2, type: 3}
+  _projectilePrefab: {fileID: 609475235294103331, guid: e491875d5e41caf408cc558cb3e42fe5,
+    type: 3}
   _name: Tower 1
   _health: 0
   _damage: 0
+  _attackSpeed: 1
   _baseRange: 10

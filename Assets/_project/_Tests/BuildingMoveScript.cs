@@ -38,7 +38,7 @@ namespace _project._Tests
                 Destroy(_building);
             }
             
-            GameObject instance = Instantiate(so.Prefab, Vector3.up * 500, Quaternion.identity, transform);
+            GameObject instance = Instantiate(so.Prefab, Vector3.up * 500, Quaternion.identity);
 
             _building = instance;
             _buildingScript = instance.GetComponent<BuildingScript>();

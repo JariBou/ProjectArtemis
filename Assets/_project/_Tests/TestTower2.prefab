@@ -152,6 +152,7 @@ MonoBehaviour:
   _baseMeshRenderer: {fileID: 7075148134272552575}
   _meshRenderer: {fileID: 7699669257915534546}
   _rangeIndicator: {fileID: 4245941072386870454}
+  _shootingStartingPoint: {fileID: 2902916328968002118}
 --- !u!1 &3577912285360559628
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +165,8 @@ GameObject:
   - component: {fileID: 955686150458262291}
   - component: {fileID: 3073619009711880153}
   - component: {fileID: 5790057759056700019}
+  - component: {fileID: 5373709421839073256}
+  - component: {fileID: 6470664310345994949}
   m_Layer: 0
   m_Name: RangeIndicator
   m_TagString: Untagged
@@ -257,6 +260,46 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0.21486151, z: 0}
+--- !u!54 &5373709421839073256
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3577912285360559628}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &6470664310345994949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3577912285360559628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1b32fbc38d62d4e985187bd1757461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _buildingScript: {fileID: 2474623140375587990}
 --- !u!1 &4638785012433739751
 GameObject:
   m_ObjectHideFlags: 0

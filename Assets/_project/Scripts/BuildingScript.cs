@@ -9,10 +9,16 @@ namespace _project.Scripts
         [SerializeField] private MeshRenderer _baseMeshRenderer;
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private Transform _rangeIndicator;
+        [SerializeField] private Transform _shootingStartingPoint;
         private TowerScriptableObject _towerSo;
 
         private List<Collider> _enteredColliders = new List<Collider>();
         public bool CanBePlaced => _enteredColliders.Count == 0 && _isAllowedToBePlaced;
+
+        public TowerScriptableObject TowerSo => _towerSo;
+
+        public Transform ShootingStartingPoint => _shootingStartingPoint;
+
         private bool _isAllowedToBePlaced = true;
 
 
@@ -22,7 +28,7 @@ namespace _project.Scripts
             
             float towerThiccness = _baseMeshRenderer.bounds.extents.x;
 
-            Vector3 rangeVector = new(towerThiccness + _towerSo.BaseRange, 2, towerThiccness + _towerSo.BaseRange);
+            Vector3 rangeVector = new(towerThiccness + TowerSo.BaseRange, 2, towerThiccness + TowerSo.BaseRange);
             
             _rangeIndicator.localScale = rangeVector;
         }

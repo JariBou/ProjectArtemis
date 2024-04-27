@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _project.ScriptableObjects.Scripts;
 using UnityEngine;
@@ -18,8 +19,16 @@ namespace _project.Scripts
         public TowerScriptableObject TowerSo => _towerSo;
 
         public Transform ShootingStartingPoint => _shootingStartingPoint;
-
+        
         private bool _isAllowedToBePlaced = true;
+        private bool _isActive;
+        
+        public bool IsActive => _isActive;
+
+        private void Awake()
+        {
+            DisableTower();
+        }
 
 
         public void Config(TowerScriptableObject towerSo)
@@ -80,6 +89,21 @@ namespace _project.Scripts
         public void MoveTo(Vector3 pos)
         {
             transform.position = pos;
+        }
+        
+        public void DisableTower()
+        {
+            SetTowerState(false);
+        }
+
+        public void EnableTower()
+        {
+            SetTowerState(true);
+        }
+
+        public void SetTowerState(bool state)
+        {
+            _isActive = state;
         }
 
         // Start is called before the first frame update

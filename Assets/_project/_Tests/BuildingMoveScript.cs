@@ -2,6 +2,7 @@ using System;
 using _project.ScriptableObjects.Scripts;
 using _project.Scripts;
 using _project.Scripts.Core;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -78,17 +79,17 @@ namespace _project._Tests
             if (PointerUtils.IsPointerOverUI) return;
         
             if (!_buildingScript.CanBePlaced) return;
+            
+            _buildingScript.EnableTower();
        
             _isMovingBuilding = false;
             _buildingScript = null;
         }
 
-  
-
         public void UpdatePointerPos(InputAction.CallbackContext context)
         {
         }
-    
+        
         private void OnEnable()
         {
             _playerActions.BaseActionMap.Enable();

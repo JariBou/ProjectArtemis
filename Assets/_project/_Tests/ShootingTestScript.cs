@@ -31,6 +31,9 @@ public class ShootingTestScript : MonoBehaviour
 
     private void Update()
     {
+        
+        if (!_buildingScript.IsActive) return;
+        
         _timer += Time.deltaTime;
         if (_enteredGOs.Count == 0) return;
         if (_timer >= _buildingScript.TowerSo.AttackSpeed)

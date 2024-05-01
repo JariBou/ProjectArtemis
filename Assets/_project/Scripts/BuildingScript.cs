@@ -35,11 +35,7 @@ namespace _project.Scripts
         {
             _towerSo = towerSo;
             
-            float towerThiccness = _baseMeshRenderer.bounds.extents.x;
-
-            Vector3 rangeVector = new(towerThiccness + TowerSo.BaseRange, 2, towerThiccness + TowerSo.BaseRange);
-            
-            _rangeIndicator.localScale = rangeVector;
+            _rangeIndicator.localScale = new(TowerSo.BaseRange, 2, TowerSo.BaseRange);
         }
 
 

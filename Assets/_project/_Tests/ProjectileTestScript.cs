@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _project._Tests
 {
-    public class ProjectileTestScript : MonoBehaviour
+    public class ProjectileTestScript : PoolObject<ProjectileTestScript>
     {
         [SerializeField] private float _speed = 10;
         private Transform _target;
@@ -18,6 +18,17 @@ namespace _project._Tests
             if (_target == null) return;
             Vector3 direction = (_target.position - transform.position).normalized;
             transform.position += direction * (_speed * Time.fixedDeltaTime);
+        }
+
+        protected override void Self_Release()
+        {
+            gameObject.SetActive(false);
+        }
+
+        protected override void Self_Reserve(ProjectileTestScript copyObject)
+        {
+            
+            gameObject.SetActive(true);
         }
     }
 }

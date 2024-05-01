@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class EnemyTestScript : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<ProjectileTestScript>())
         {
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<ProjectileTestScript>().Release();
         }
     }
 }

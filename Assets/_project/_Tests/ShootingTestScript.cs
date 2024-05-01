@@ -12,6 +12,8 @@ public class ShootingTestScript : MonoBehaviour
     private float _timer;
     [ReadOnly] private List<GameObject> _enteredGOs = new();
     
+    private Pool<ProjectileTestScript> _pool = new();
+    
     
     private void OnTriggerEnter(Collider other)
     {
@@ -36,11 +38,15 @@ public class ShootingTestScript : MonoBehaviour
         
         _timer += Time.deltaTime;
         if (_enteredGOs.Count == 0) return;
-        if (_timer >= _buildingScript.TowerSo.AttackSpeed)
+        if (_timer >= 1/_buildingScript.TowerSo.AttackSpeed)
         {
             _timer = 0;
-            Instantiate(_buildingScript.TowerSo.ProjectilePrefab, _buildingScript.ShootingStartingPoint.position,
-                Quaternion.identity, _buildingScript.ShootingStartingPoint).GetComponent<ProjectileTestScript>().Config(_enteredGOs[0].transform);
+
+            _pool.CreateNewObject(_buildingScript.TowerSo.ProjectilePrefab, _buildingScript.ShootingStartingPoint.position,
+                Quaternion.identity).Config(_enteredGOs[0].transform);
+            
+            // Instantiate(_buildingScript.TowerSo.ProjectilePrefab, _buildingScript.ShootingStartingPoint.position,
+            //     Quaternion.identity, _buildingScript.ShootingStartingPoint).GetComponent<ProjectileTestScript>().Config(_enteredGOs[0].transform);
         }
     }
 }

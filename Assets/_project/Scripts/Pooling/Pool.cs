@@ -22,8 +22,7 @@ public class Pool<T> where T : MonoBehaviour, IPoolable<T>
         _maxSize = size;
         _poolObjects = new List<T>(size);
     }
-
-    //TODO: try to fuse these 2 methods
+    
     public T CreateNewObject(T prefab, Transform parent = null)
     {
         if (HasAvailablePoolObject(out T freeGameObject))
@@ -61,7 +60,6 @@ public class Pool<T> where T : MonoBehaviour, IPoolable<T>
         return InstantiateNewObject(prefab, position, rotation, parent);
     }
     
-    //TODO: try to fuse these 2 methods
     public T CreateNewObject(GameObject prefab, Transform parent = null)
     {
         if (!prefab.GetComponent<T>())

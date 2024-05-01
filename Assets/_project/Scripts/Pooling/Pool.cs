@@ -4,132 +4,88 @@ using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class Pool<T> where T : MonoBehaviour, IPoolable<T>
+namespace _project.Scripts.Pooling
 {
-    private bool _resizable;
-    private int _maxSize;
-    private List<T> _poolObjects;
-    
-    public Pool()
+    public class Pool<TObject, TInfo> where TObject : MonoBehaviour, IPoolable<TInfo> where TInfo : PoolMemberInfoBase
     {
-        _resizable = true;
-        _poolObjects = new List<T>();
-    }
+        private bool _resizable;
+        private int _maxSize;
+        private List<TObject> _poolObjects;
     
-    public Pool(int size)
-    {
-        _resizable = false;
-        _maxSize = size;
-        _poolObjects = new List<T>(size);
-    }
-    
-    public T CreateNewObject(T prefab, Transform parent = null)
-    {
-        if (HasAvailablePoolObject(out T freeGameObject))
+        public Pool()
         {
-            freeGameObject.Reserve(prefab);
-            return freeGameObject;
+            _resizable = true;
+            _poolObjects = new List<TObject>();
         }
-
-        if (!_resizable && _poolObjects.Count >= _maxSize)
-        {  
-            return null;
-        }
-        
-        return InstantiateNewObject(prefab, parent);
-    }
     
-    public T CreateNewObject(T prefab, Vector3 position, Quaternion rotation, Transform parent = null)
-    {
-        if (HasAvailablePoolObject(out T freeGameObject))
+        public Pool(int size)
         {
-            freeGameObject.Reserve(prefab);
-            freeGameObject.transform.position = position;
-            freeGameObject.transform.rotation = rotation;
-            if (parent != null)
+            _resizable = false;
+            _maxSize = size;
+            _poolObjects = new List<TObject>(size);
+        }
+    
+        public TObject CreateNewObject(TObject prefab, TInfo info, Transform parent = null)
+        {
+            if (HasAvailablePoolObject(out TObject freeGameObject))
             {
-                freeGameObject.transform.parent = parent;
-            }return freeGameObject;
-        }
-
-        if (!_resizable && _poolObjects.Count >= _maxSize)
-        {  
-            return null;
-        }
-        
-        return InstantiateNewObject(prefab, position, rotation, parent);
-    }
-    
-    public T CreateNewObject(GameObject prefab, Transform parent = null)
-    {
-        if (!prefab.GetComponent<T>())
-            throw new ArgumentException($"prefab does not have component of type {typeof(T)}");
-        
-        if (HasAvailablePoolObject(out T freeGameObject))
-        {
-            freeGameObject.Reserve(prefab.GetComponent<T>());
-            return freeGameObject;
-        }
-
-        if (!_resizable && _poolObjects.Count >= _maxSize)
-        {  
-            return null;
-        }
-        
-        return InstantiateNewObject(prefab.GetComponent<T>(), parent);
-    }
-    
-    public T CreateNewObject(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
-    {
-        if (!prefab.GetComponent<T>())
-            throw new ArgumentException($"prefab does not have component of type {typeof(T)}");
-        
-        if (HasAvailablePoolObject(out T freeGameObject))
-        {
-            freeGameObject.Reserve(prefab.GetComponent<T>());
-            freeGameObject.transform.position = position;
-            freeGameObject.transform.rotation = rotation;
-            if (parent != null)
-            {
-                freeGameObject.transform.parent = parent;
+                freeGameObject.Reserve(info);
+                if (parent != null)
+                {
+                    freeGameObject.transform.parent = parent;
+                }
+                return freeGameObject;
             }
-            return freeGameObject;
-        }
 
-        if (!_resizable && _poolObjects.Count >= _maxSize)
-        {  
-            return null;
-        }
+            if (!_resizable && _poolObjects.Count >= _maxSize)
+            {  
+                return null;
+            }
         
-        return InstantiateNewObject(prefab.GetComponent<T>(), position, rotation, parent);
-    }
-
-    protected T InstantiateNewObject(T prefab, Transform parent)
-    {
-        T createdObj = parent == null ? Object.Instantiate(prefab).GetComponent<T>() : Object.Instantiate(prefab, parent).GetComponent<T>();
-        createdObj.Init();
-        _poolObjects.Add(createdObj);
-        //createdObj.TriggerReleaseEvent(ObjectDisabled);
-        return createdObj;
-    }
-    
-    protected T InstantiateNewObject(T prefab, Vector3 position, Quaternion rotation, Transform parent)
-    {
-        T createdObj = parent == null ? Object.Instantiate(prefab, position, rotation).GetComponent<T>() : Object.Instantiate(prefab, position, rotation, parent).GetComponent<T>();
-        createdObj.Init();
-        _poolObjects.Add(createdObj);
-        //createdObj.TriggerReleaseEvent(ObjectDisabled);
-        return createdObj;
-    }
-    
-    public bool HasAvailablePoolObject(out T freeObject)
-    {
-        freeObject = default;
-        foreach (T poolObject in _poolObjects.Where(poolObject => poolObject.IsAvailable()))
-        {
-            freeObject = poolObject;
-            return true;
+            return InstantiateNewObject(prefab, info, parent);
         }
-        return false;
+    
+        public TObject CreateNewObject(GameObject prefab, TInfo info, Transform parent = null)
+        {
+            if (!prefab.GetComponent<TObject>())
+                throw new ArgumentException($"prefab does not have component of type {typeof(TObject)}");
+        
+            if (HasAvailablePoolObject(out TObject freeGameObject))
+            {
+                freeGameObject.Reserve(info);
+                if (parent != null)
+                {
+                    freeGameObject.transform.parent = parent;
+                }
+                return freeGameObject;
+            }
+
+            if (!_resizable && _poolObjects.Count >= _maxSize)
+            {  
+                return null;
+            }
+        
+            return InstantiateNewObject(prefab.GetComponent<TObject>(), info, parent);
+        }
+    
+        protected TObject InstantiateNewObject(TObject prefab, TInfo info, Transform parent)
+        {
+            TObject createdObj = parent == null ? Object.Instantiate(prefab, info.position, info.rotation).GetComponent<TObject>() : Object.Instantiate(prefab, info.position, info.rotation, parent).GetComponent<TObject>();
+            createdObj.Init();
+            _poolObjects.Add(createdObj);
+            //createdObj.TriggerReleaseEvent(ObjectDisabled);
+            return createdObj;
+        }
+    
+        public bool HasAvailablePoolObject(out TObject freeObject)
+        {
+            freeObject = default;
+            foreach (TObject poolObject in _poolObjects.Where(poolObject => poolObject.IsAvailable()))
+            {
+                freeObject = poolObject;
+                return true;
+            }
+            return false;
+        }
     }
 }

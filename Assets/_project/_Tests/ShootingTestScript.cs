@@ -1,8 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using _project._Tests;
 using _project.Scripts;
+using _project.Scripts.Pooling;
 using GraphicsLabor.Scripts.Attributes.LaborerAttributes.InspectedAttributes;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ public class ShootingTestScript : MonoBehaviour
     private float _timer;
     [ReadOnly] private List<GameObject> _enteredGOs = new();
     
-    private Pool<ProjectileTestScript> _pool = new();
+    private Pool<ProjectileTestScript, TestClass> _pool = new();
     
     
     private void OnTriggerEnter(Collider other)
@@ -42,11 +41,24 @@ public class ShootingTestScript : MonoBehaviour
         {
             _timer = 0;
 
-            _pool.CreateNewObject(_buildingScript.TowerSo.ProjectilePrefab, _buildingScript.ShootingStartingPoint.position,
-                Quaternion.identity).Config(_enteredGOs[0].transform);
+            TestClass info = new TestClass
+            {
+                position = _buildingScript.ShootingStartingPoint.position,
+                rotation = Quaternion.identity,
+                speed = 2
+            };
+
+            _pool.CreateNewObject(_buildingScript.TowerSo.ProjectilePrefab, info).Config(_enteredGOs[0].transform);
             
             // Instantiate(_buildingScript.TowerSo.ProjectilePrefab, _buildingScript.ShootingStartingPoint.position,
             //     Quaternion.identity, _buildingScript.ShootingStartingPoint).GetComponent<ProjectileTestScript>().Config(_enteredGOs[0].transform);
         }
     }
 }
+
+public class TestClass : PoolMemberInfoBase
+{
+    public int speed;
+}
+
+

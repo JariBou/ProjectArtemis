@@ -2,10 +2,8 @@ using System;
 using _project.ScriptableObjects.Scripts;
 using _project.Scripts;
 using _project.Scripts.Core;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace _project._Tests
 {

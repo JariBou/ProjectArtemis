@@ -1,9 +1,9 @@
-﻿using System;
+﻿using _project.Scripts.Pooling;
 using UnityEngine;
 
 namespace _project._Tests
 {
-    public class ProjectileTestScript : PoolObject<ProjectileTestScript>
+    public class ProjectileTestScript : PoolObject<TestClass>
     {
         [SerializeField] private float _speed = 10;
         private Transform _target;
@@ -25,8 +25,9 @@ namespace _project._Tests
             gameObject.SetActive(false);
         }
 
-        protected override void Self_Reserve(ProjectileTestScript copyObject)
+        protected override void Self_Reserve(TestClass copyObject)
         {
+            transform.position = copyObject.position;
             
             gameObject.SetActive(true);
         }

@@ -1,9 +1,10 @@
-using System;
-
-public interface IPoolable<T> where T : IPoolable<T>
+namespace _project.Scripts.Pooling
 {
-    public void Release();
-    public void Init();
-    public void Reserve(T copyObject);
-    public bool IsAvailable();
+    public interface IPoolable<in TInfo> where TInfo : PoolMemberInfoBase
+    {
+        public void Release();
+        public void Init();
+        public void Reserve(TInfo copyObject);
+        public bool IsAvailable();
+    }
 }

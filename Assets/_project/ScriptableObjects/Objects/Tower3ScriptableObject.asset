@@ -18,5 +18,5 @@ MonoBehaviour:
   _name: Tower 3
   _health: 0
   _damage: 0
-  _attackSpeed: 2
+  _attackSpeed: 4
   _baseRange: 7.5

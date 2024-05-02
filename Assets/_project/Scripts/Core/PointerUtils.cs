@@ -19,7 +19,7 @@ namespace _project.Scripts.Core
         {
             if (_raycasters == null)
             {
-                _raycasters = Object.FindObjectsOfType<GraphicRaycaster>();
+                _raycasters = Object.FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None);
             }
 
             return _raycasters;

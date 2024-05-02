@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using _project._Tests;
 using _project.Scripts;
@@ -17,7 +16,7 @@ public class ShootingTestScript : MonoBehaviour
 
     private void Start()
     {
-        _pool = PoolManager.RequestPool<ProjectileTestScript, TestInfoClass>();
+        _pool = PoolManager.RequestPoolOfType<ProjectileTestScript, TestInfoClass>();
         //Debug.Log(_pool);
     }
 

@@ -6,7 +6,13 @@ using Object = UnityEngine.Object;
 
 namespace _project.Scripts.Pooling
 {
-    public class Pool<TObject, TInfo> where TObject : PoolObject<TInfo> where TInfo : PoolMemberInfoBase
+    public interface IPoolManagementInterface
+    {
+        public void ClearPool(bool callRelease = false);
+        public void DestroyAllInactive();
+    }
+    
+    public class Pool<TObject, TInfo>: IPoolManagementInterface where TObject : MonoBehaviour, IPoolable<TInfo> where TInfo : PoolMemberInfoBase
     {
         private bool _resizable;
         private int _maxSize;
@@ -66,6 +72,28 @@ namespace _project.Scripts.Pooling
                 return true;
             }
             return false;
+        }
+
+        public void ClearPool(bool callRelease = false)
+        {
+            foreach (TObject poolObject in _poolObjects)
+            {
+                if (callRelease) poolObject.Release();
+                _poolObjects.Remove(poolObject);
+                Object.Destroy(poolObject.gameObject);
+            }
+        }
+
+        public void DestroyAllInactive()
+        {
+            foreach (TObject poolObject in _poolObjects)
+            {
+                if (poolObject.IsAvailable())
+                {
+                    _poolObjects.Remove(poolObject);
+                    Object.Destroy(poolObject.gameObject);
+                }
+            }
         }
     }
 }

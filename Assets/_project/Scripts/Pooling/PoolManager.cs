@@ -8,8 +8,7 @@ namespace _project.Scripts.Pooling
     {
         private static PoolManager Instance;
 
-        private Dictionary<Type, Pool<PoolObject<PoolMemberInfoBase>, PoolMemberInfoBase>> _dictionary = new ();
-
+        private Dictionary<Type, IPoolManagementInterface> _dictionary = new ();
 
         private void Awake()
         {
@@ -23,26 +22,56 @@ namespace _project.Scripts.Pooling
             }
         }
 
-        public static Pool<TObject, TInfo> RequestPool<TObject, TInfo>() 
-            where TObject : PoolObject<TInfo>
+        public static Pool<TObject, TInfo> RequestPoolOfType<TObject, TInfo>() 
+            where TObject : MonoBehaviour, IPoolable<TInfo>
             where TInfo : PoolMemberInfoBase
         {
-            foreach (KeyValuePair<Type,Pool<PoolObject<PoolMemberInfoBase>,PoolMemberInfoBase>> keyValuePair in Instance._dictionary)
+            if (Instance._dictionary.TryGetValue(typeof(TObject), out IPoolManagementInterface poolManagementInterface))
             {
-                Debug.Log(keyValuePair.Value);
+                return (Pool<TObject, TInfo>)poolManagementInterface;
             }
-            
-            if (Instance._dictionary.TryGetValue(typeof(TObject), out Pool<PoolObject<PoolMemberInfoBase>, PoolMemberInfoBase> value))
-            {
-                Debug.Log("Surpise");
-                return (Pool<TObject, TInfo>)value;
-            }
-            Pool<TObject, TInfo> pool = new Pool<TObject, TInfo>();
-            // Instance._dictionary.Add(typeof(TObject), pool as Pool<PoolObject<PoolMemberInfoBase>, PoolMemberInfoBase>);
-            Instance._dictionary.Add(typeof(TObject), (Pool<PoolObject<PoolMemberInfoBase>, PoolMemberInfoBase>) pool);
-            
-            return pool;
+
+            Pool<TObject, TInfo> newPool = new Pool<TObject, TInfo>();
+            Instance._dictionary.Add(typeof(TObject), newPool);
+            return newPool;
         }
 
+        // ========= Justin Case ================================
+        public static void DestroyAllInactiveOfPoolOfType<TObject, TInfo>()
+            where TObject : MonoBehaviour, IPoolable<TInfo>
+            where TInfo : PoolMemberInfoBase
+        {
+            if (Instance._dictionary.TryGetValue(typeof(TObject), out IPoolManagementInterface poolManagementInterface))
+            {
+                poolManagementInterface.DestroyAllInactive();
+            }
+        }
+        
+        public static void DestroyAllInactiveOfAllPools()
+        {
+            foreach (IPoolManagementInterface poolManagementInterface in Instance._dictionary.Values)
+            {
+                poolManagementInterface.DestroyAllInactive();
+            }
+        }
+        
+        public static void ClearPoolOfType<TObject, TInfo>()
+            where TObject : MonoBehaviour, IPoolable<TInfo>
+            where TInfo : PoolMemberInfoBase
+        {
+            if (Instance._dictionary.TryGetValue(typeof(TObject), out IPoolManagementInterface poolManagementInterface))
+            {
+                poolManagementInterface.ClearPool();
+            }
+        }
+
+        public static void ClearAllPools()
+        {
+            foreach (IPoolManagementInterface poolManagementInterface in Instance._dictionary.Values)
+            {
+                poolManagementInterface.ClearPool();
+            }
+        }
+        // ======================================================
     }
 }

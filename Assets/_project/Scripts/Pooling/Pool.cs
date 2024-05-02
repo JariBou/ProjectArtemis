@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace _project.Scripts.Pooling
 {
-    public class Pool<TObject, TInfo> where TObject : MonoBehaviour, IPoolable<TInfo> where TInfo : PoolMemberInfoBase
+    public class Pool<TObject, TInfo> where TObject : PoolObject<TInfo> where TInfo : PoolMemberInfoBase
     {
         private bool _resizable;
         private int _maxSize;
@@ -23,26 +23,6 @@ namespace _project.Scripts.Pooling
             _resizable = false;
             _maxSize = size;
             _poolObjects = new List<TObject>(size);
-        }
-    
-        public TObject CreateNewObject(TObject prefab, TInfo info, Transform parent = null)
-        {
-            if (HasAvailablePoolObject(out TObject freeGameObject))
-            {
-                freeGameObject.Reserve(info);
-                if (parent != null)
-                {
-                    freeGameObject.transform.parent = parent;
-                }
-                return freeGameObject;
-            }
-
-            if (!_resizable && _poolObjects.Count >= _maxSize)
-            {  
-                return null;
-            }
-        
-            return InstantiateNewObject(prefab, info, parent);
         }
     
         public TObject CreateNewObject(GameObject prefab, TInfo info, Transform parent = null)
@@ -65,10 +45,10 @@ namespace _project.Scripts.Pooling
                 return null;
             }
         
-            return InstantiateNewObject(prefab.GetComponent<TObject>(), info, parent);
+            return InstantiateNewObject(prefab, info, parent);
         }
     
-        protected TObject InstantiateNewObject(TObject prefab, TInfo info, Transform parent)
+        protected TObject InstantiateNewObject(GameObject prefab, TInfo info, Transform parent)
         {
             TObject createdObj = parent == null ? Object.Instantiate(prefab, info.position, info.rotation).GetComponent<TObject>() : Object.Instantiate(prefab, info.position, info.rotation, parent).GetComponent<TObject>();
             createdObj.Init();

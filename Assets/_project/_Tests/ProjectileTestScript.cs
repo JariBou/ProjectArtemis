@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _project._Tests
 {
-    public class ProjectileTestScript : PoolObject<TestClass>
+    public class ProjectileTestScript : PoolObject<TestInfoClass>
     {
         [SerializeField] private float _speed = 10;
         private Transform _target;
@@ -25,7 +25,7 @@ namespace _project._Tests
             gameObject.SetActive(false);
         }
 
-        protected override void Self_Reserve(TestClass copyObject)
+        protected override void Self_Reserve(TestInfoClass copyObject)
         {
             transform.position = copyObject.position;
             

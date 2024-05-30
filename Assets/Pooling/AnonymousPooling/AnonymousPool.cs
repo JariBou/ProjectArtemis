@@ -1,42 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pooling.common;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace _project.Scripts.Pooling
+namespace Pooling.AnonymousPooling
 {
-    public interface IPoolManagementInterface
-    {
-        public void ClearPool(bool callRelease = false);
-        public void DestroyAllInactive();
-    }
-    
-    public class Pool<TObject, TInfo>: IPoolManagementInterface where TObject : MonoBehaviour, IPoolable<TInfo> where TInfo : PoolMemberInfoBase
+    public class AnonymousPool
     {
         private bool _resizable;
         private int _maxSize;
-        private List<TObject> _poolObjects;
+        private List<AnonymousPoolObject> _poolObjects;
     
-        public Pool()
+        public AnonymousPool()
         {
             _resizable = true;
-            _poolObjects = new List<TObject>();
+            _poolObjects = new List<AnonymousPoolObject>();
         }
     
-        public Pool(int size)
+        public AnonymousPool(int size)
         {
             _resizable = false;
             _maxSize = size;
-            _poolObjects = new List<TObject>(size);
+            _poolObjects = new List<AnonymousPoolObject>(size);
         }
     
-        public TObject CreateNewObject(GameObject prefab, TInfo info, Transform parent = null)
+        public AnonymousPoolObject CreateNewObject(GameObject prefab, PoolMemberInfoBase info, Transform parent = null)
         {
-            if (!prefab.GetComponent<TObject>())
-                throw new ArgumentException($"prefab does not have component of type {typeof(TObject)}");
-        
-            if (HasAvailablePoolObject(out TObject freeGameObject))
+            if (HasAvailablePoolObject(out AnonymousPoolObject freeGameObject))
             {
                 freeGameObject.Reserve(info);
                 if (parent != null)
@@ -54,19 +46,19 @@ namespace _project.Scripts.Pooling
             return InstantiateNewObject(prefab, info, parent);
         }
     
-        protected TObject InstantiateNewObject(GameObject prefab, TInfo info, Transform parent)
+        protected AnonymousPoolObject InstantiateNewObject(GameObject prefab, PoolMemberInfoBase info, Transform parent)
         {
-            TObject createdObj = parent == null ? Object.Instantiate(prefab, info.position, info.rotation).GetComponent<TObject>() : Object.Instantiate(prefab, info.position, info.rotation, parent).GetComponent<TObject>();
+            AnonymousPoolObject createdObj = parent == null ? Object.Instantiate(prefab, info.Position, info.Rotation).GetComponent<AnonymousPoolObject>() : Object.Instantiate(prefab, info.Position, info.Rotation, parent).GetComponent<AnonymousPoolObject>();
             createdObj.Init();
             _poolObjects.Add(createdObj);
             //createdObj.TriggerReleaseEvent(ObjectDisabled);
             return createdObj;
         }
     
-        public bool HasAvailablePoolObject(out TObject freeObject)
+        public bool HasAvailablePoolObject(out AnonymousPoolObject freeObject)
         {
             freeObject = default;
-            foreach (TObject poolObject in _poolObjects.Where(poolObject => poolObject.IsAvailable()))
+            foreach (AnonymousPoolObject poolObject in _poolObjects.Where(poolObject => poolObject.IsAvailable()))
             {
                 freeObject = poolObject;
                 return true;
@@ -76,7 +68,7 @@ namespace _project.Scripts.Pooling
 
         public void ClearPool(bool callRelease = false)
         {
-            foreach (TObject poolObject in _poolObjects)
+            foreach (AnonymousPoolObject poolObject in _poolObjects)
             {
                 if (callRelease) poolObject.Release();
                 _poolObjects.Remove(poolObject);
@@ -86,7 +78,7 @@ namespace _project.Scripts.Pooling
 
         public void DestroyAllInactive()
         {
-            foreach (TObject poolObject in _poolObjects)
+            foreach (AnonymousPoolObject poolObject in _poolObjects)
             {
                 if (poolObject.IsAvailable())
                 {

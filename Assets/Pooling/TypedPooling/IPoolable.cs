@@ -1,4 +1,6 @@
-namespace _project.Scripts.Pooling
+using Pooling.common;
+
+namespace Pooling.TypedPooling
 {
     public interface IPoolable<in TInfo> where TInfo : PoolMemberInfoBase
     {

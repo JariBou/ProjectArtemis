@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Pooling.common;
 using UnityEngine;
 
-namespace _project.Scripts.Pooling
+namespace Pooling.TypedPooling
 {
     public class PoolManager : MonoBehaviour
     {

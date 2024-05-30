@@ -1,4 +1,4 @@
-﻿using _project.Scripts.Pooling;
+﻿using Pooling.TypedPooling;
 using UnityEngine;
 
 namespace _project._Tests
@@ -27,7 +27,7 @@ namespace _project._Tests
 
         protected override void Self_Reserve(TestInfoClass copyObject)
         {
-            transform.position = copyObject.position;
+            transform.position = copyObject.Position;
             
             gameObject.SetActive(true);
         }

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using _project._Tests;
 using _project.Scripts;
-using _project.Scripts.Pooling;
 using GraphicsLabor.Scripts.Attributes.LaborerAttributes.InspectedAttributes;
+using Pooling.common;
+using Pooling.TypedPooling;
 using UnityEngine;
 
 public class ShootingTestScript : MonoBehaviour
@@ -49,8 +50,8 @@ public class ShootingTestScript : MonoBehaviour
 
             TestInfoClass info = new TestInfoClass
             {
-                position = _buildingScript.ShootingStartingPoint.position,
-                rotation = Quaternion.identity,
+                Position = _buildingScript.ShootingStartingPoint.position,
+                Rotation = Quaternion.identity,
                 speed = 2
             };
 

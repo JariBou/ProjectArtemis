@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Pooling.common;
+using UnityEngine;
 
-namespace _project.Scripts.Pooling
+namespace Pooling.TypedPooling
 {
     public abstract class PoolObject<TInfo> : MonoBehaviour, IPoolable<TInfo> where TInfo : PoolMemberInfoBase
     {
@@ -37,25 +38,5 @@ namespace _project.Scripts.Pooling
         }
     }
 
-    public class PoolMemberInfoBase
-    {
-        public Vector3 position;
-        public Quaternion rotation;
-        public Transform parent = null;
     
-        public PoolMemberInfoBase() { }
-    
-        public PoolMemberInfoBase(Vector3 position, Quaternion rotation)
-        {
-            this.position = position;
-            this.rotation = rotation;
-        }
-    
-        public PoolMemberInfoBase(Vector3 position, Quaternion rotation, Transform parent)
-        {
-            this.position = position;
-            this.rotation = rotation;
-            this.parent = parent;
-        }
-    }
 }
